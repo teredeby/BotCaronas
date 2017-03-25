@@ -69,13 +69,13 @@
 
 									7. Caronas serão preferencialmente anunciadas pelo bot de caronas.
 
-									8. Manifeste interesse sempre que possível mencionando a @ do motorista. 
+									8. Manifeste interesse sempre que possível mencionando a @ do motorista e o chame IMEDIATAMENTE no privado para combinar rota e horário.
 
-									9. Maneirar no flood nas horas críticas de anúncio de caronas. Os bots ajudam mas Ainda não são perfeitos.
+									9. Maneirar no flood nas horas críticas de anúncio de caronas. Os bots ajudam mas ainda não são perfeitos.
 
 									10. Final de semana, assuntos livres!
 
-									11. Duvidas ou sugestões para aprimorar o Bot fale com o @PeedroRod.";
+									11. Duvidas ou sugestões para aprimorar o Bot fale com o @PeedroRod ou @Teredeby.";
 
 						TelegramConnect::sendMessage($chat_id, $regras);
 						break;
