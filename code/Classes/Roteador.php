@@ -138,9 +138,9 @@
 						
 					case 'michaeldouglas':
 						$texto = "NUNCA MAIS EU VOU DORMIR
-							  NUNCA MAIS EU VOU DORMIR
-							  IIH, QUE ISSO?
-							  MICHAEL DOUGLAS";
+							NUNCA MAIS EU VOU DORMIR
+							IIH, QUE ISSO?
+							MICHAEL DOUGLAS";
 						TelegramConnect::sendMessage($chat_id, $texto);
 						break;
 
