@@ -113,14 +113,18 @@
 
 								/vagas [ida|volta] [vagas] --> Este comando serve para atualizar o número de vagas de uma carona
 									Ex: /vagas ida 2 
-									(Altera o número de vagas da ida para 2)";
+									(Altera o número de vagas da ida para 2)
+
+								/fortune  [ on | off ] [ livro ] --> retorna uma frase famosa de um livro já cadastrado, implementado apenas o Murphy.  Se usado a opção on ou off liga ou desliga o modo ofensivo, padrão é desligado.
+
+";
 						
 						TelegramConnect::sendMessage($chat_id, $help);
 						break;
 						
 					case 'teste':
 						error_log("teste");
-						$texto = "Versão 1.4 - ChatId: $chat_id";
+						$texto = "Versão 1.3 - ChatId: $chat_id";
 
 						TelegramConnect::sendMessage($chat_id, $texto);
 						break;
@@ -128,16 +132,6 @@
 					case 'stop':
 						$texto = "GALERA, OLHA A ZOEIRA...";
 
-						TelegramConnect::sendMessage($chat_id, $texto);
-						break;
-						
-					case 'romulomendonca':
-						$texto = "GALERA ME DEIXEM EM PAZ...";
-						TelegramConnect::sendMessage($chat_id, $texto);
-						break;
-						
-					case 'michaeldouglas':
-						$texto = "NUNCA MAIS EU VOU DORMIR, NUNCA MAIS EU VOU DORMIR";
 						TelegramConnect::sendMessage($chat_id, $texto);
 						break;
 
@@ -295,6 +289,12 @@
 							TelegramConnect::sendMessage($chat_id, "Formato: /remover [ida|volta]");
 						}
 
+						break;
+				case 'fortune':
+
+						$fortune = $dao->getFortune(false);
+						TelegramConnect::sendMessage($chat_id, $fortune);
+		
 						break;
 				}
 			} else {

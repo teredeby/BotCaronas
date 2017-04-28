@@ -277,6 +277,33 @@
 			
 			return $resultado;
 		}
+
+
+		public function getFortune(ofensive = false) {
+
+			$query = "Select count(*) from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode);"
+
+			$stm = $this->db->prepare($query);
+			$stm->bindParam(":mode",ofensive);
+			$stm->execute();
+
+			$result = $stm->fetch(PDO::FETCH_ASSOC);
+
+			$total = $result[0];
+			$r			= random(1,$total);
+			if  ( $r > 1 )
+				$r --;
+
+			$query = "Select frase from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode) offset :offset"; 
+
+			$stm = $this->db->prepare($query);
+			$stm->bindParam(":mode",ofensive);
+			$stm->bindParam(":offset",$r);
+			$stm->execute();
+			$result = $stm->fetch(PDO::FETCH_ASSOC);
+
+			return ( $result[0] );
+		}
     }
 
     
