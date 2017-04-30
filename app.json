@@ -1,0 +1,16 @@
+{
+  "name": "BotCaronas",
+  "scripts": {
+    "postdeploy": "databases/script.sql"
+  },
+  "env": {
+  },
+  "formation": {
+  },
+  "addons": [
+
+  ],
+  "buildpacks": [
+
+  ]
+}
