@@ -124,7 +124,7 @@
 						
 					case 'teste':
 						error_log("teste");
-						$texto = "Versão 1.3 - ChatId: $chat_id";
+						$texto = "Versão 1.5 - ChatId: $chat_id";
 
 						TelegramConnect::sendMessage($chat_id, $texto);
 						break;
@@ -133,6 +133,21 @@
 						$texto = "GALERA, OLHA A ZOEIRA...";
 
 						TelegramConnect::sendMessage($chat_id, $texto);
+						break;
+						
+                    case 'romulomendonca':
+                        $texto = "GALERA ME DEIXEM EM PAZ...";
+                        TelegramConnect::sendMessage($chat_id, $texto);
+                        break;
+                        
+                    case 'michaeldouglas':
+                        $texto = "NUNCA MAIS EU VOU DORMIR, NUNCA MAIS EU VOU DORMIR";
+                        TelegramConnect::sendMessage($chat_id, $texto);
+                        break;
+						
+					case 'fortune':
+						$fortune = $dao->getFortune(false);
+						TelegramConnect::sendMessage($chat_id, $fortune);
 						break;
 
 
@@ -290,12 +305,7 @@
 						}
 
 						break;
-				case 'fortune':
-
-						$fortune = $dao->getFortune(false);
-						TelegramConnect::sendMessage($chat_id, $fortune);
-		
-						break;
+				
 				}
 			} else {
 				TelegramConnect::sendMessage($chat_id, "Registre seu username nas configurações do Telegram para utilizar o Bot.");
