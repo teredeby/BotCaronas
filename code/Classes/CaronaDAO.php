@@ -279,9 +279,9 @@
 		}
 
 
-		public function getFortune(ofensive = false) {
+		public function getFortune($ofensive) {
 
-			$query = "Select count(*) from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode);"
+			$query = "Select count(*) from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode);";
 
 			$stm = $this->db->prepare($query);
 			$stm->bindParam(":mode",ofensive);
