@@ -283,25 +283,24 @@
 
 			$query = "Select count(*) from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode);";
 
-			$stm = $this->db->prepare($query);
-			$stm->bindParam(":mode",ofensive);
-			$stm->execute();
-
-			$result = $stm->fetch(PDO::FETCH_ASSOC);
-
+			$this->db->query($query);
+			$this->db->bind(":mode", $ofensive);
+			
+			$result = $this->db->resultSet()
+			
 			$total = $result[0];
-			$r			= random(1,$total);
+			
+			$r = random(1,$total);
 			if  ( $r > 1 )
 				$r --;
 
 			$query = "Select frase from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode) offset :offset"; 
-
-			$stm = $this->db->prepare($query);
-			$stm->bindParam(":mode",ofensive);
-			$stm->bindParam(":offset",$r);
-			$stm->execute();
-			$result = $stm->fetch(PDO::FETCH_ASSOC);
-
+			
+			$this->db->query($query);
+			$this->db->bind(":mode", $ofensive);
+			$this->db->bind(":offset", $r);
+			$result = $this->db->resultSet();
+		
 			return ( $result[0] );
 		}
     }
