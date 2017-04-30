@@ -290,7 +290,7 @@
 			
 			$total = $result[0];
 			
-			$r = random(1,$total);
+			$r = rand(1,$total);
 			if  ( $r > 1 )
 				$r --;
 
