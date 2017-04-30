@@ -286,7 +286,7 @@
 			$this->db->query($query);
 			$this->db->bind(":mode", $ofensive);
 			
-			$result = $this->db->resultSet();
+			$result = $this->db->single();
 			
 			$total = $result[0];
 			
@@ -299,7 +299,7 @@
 			$this->db->query($query);
 			$this->db->bind(":mode", $ofensive);
 			$this->db->bind(":offset", $r);
-			$result = $this->db->resultSet();
+			$result = $this->db->single();
 		
 			return ( $result[0] );
 		}
