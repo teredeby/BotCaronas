@@ -286,7 +286,7 @@
 			$this->db->query($query);
 			$this->db->bind(":mode", $ofensive);
 			
-			$result = $this->db->resultSet()
+			$result = $this->db->resultSet();
 			
 			$total = $result[0];
 			
