@@ -281,14 +281,16 @@
 
 		public function getFortune($ofensive) {
 
-			$query = "Select count(*) from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode);";
+			$query = "Select count(*) as quantos from fortune where livro_id in (Select livro_id from livro where ofensivo=:mode);";
 
 			$this->db->query($query);
 			$this->db->bind(":mode", $ofensive);
 			
 			$result = $this->db->single();
 			
-			$total = $result[0];
+			$total = $result['quantos'];
+			
+			error_log($total);
 			
 			$r = rand(1,$total);
 			if  ( $r > 1 )
@@ -301,7 +303,7 @@
 			$this->db->bind(":offset", $r);
 			$result = $this->db->single();
 			
-			return ( $result[0] );
+			return ( $result['frase'] );
 		}
     }
 
