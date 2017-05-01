@@ -289,6 +289,9 @@
 			$result = $this->db->single();
 			
 			$total = $result[0];
+			error_log("total: ");
+			error_log($result);
+			error_log($result[0]);
 			error_log($total);
 			
 			$r = rand(1,$total);
