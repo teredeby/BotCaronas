@@ -67,7 +67,6 @@
 
         public function execute(){
 			try{
-				error_log($this->stmt);
                 return $this->stmt->execute();
             }   
             catch(PDOException $e){

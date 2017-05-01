@@ -289,10 +289,6 @@
 			$result = $this->db->single();
 			
 			$total = $result[0];
-			error_log("total: ");
-			error_log($result);
-			error_log($result[0]);
-			error_log($total);
 			
 			$r = rand(1,$total);
 			if  ( $r > 1 )
@@ -305,8 +301,6 @@
 			$this->db->bind(":offset", $r);
 			$result = $this->db->single();
 			
-			error_log($result[0]);
-		
 			return ( $result[0] );
 		}
     }
