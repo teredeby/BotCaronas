@@ -79,7 +79,7 @@
 			return $help;
 		}						
 
-		private static function getList($tipo, $chat_id){
+		private static function getList($tipo, $dao, $chat_id){
 
 			if ( $tipo == $IDA ) {
 				$resultado = $dao->getListaIda($chat_id);
@@ -113,7 +113,7 @@
 			return $a;
 		}
 
-		private static function addPool($tipo, $chat_id, $user_id, $username, ...$args){
+		private static function addPool($tipo, $dao, $chat_id, $user_id, $username, ...$args){
 			if ($tipo == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -151,7 +151,7 @@
 			return $msg;		
 		}
 
-		private static function updatePool($chat_id, $user_id, $username, ...$args){
+		private static function updatePool($dao, $chat_id, $user_id, $username, ...$args){
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -172,7 +172,7 @@
 			} 
 		}
 
-		private static function deletePool($chat_id, $user_id, $username, ...$args) {
+		private static function deletePool($dao, $chat_id, $user_id, $username, ...$args) {
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -273,25 +273,25 @@
 					/*Comandos de viagem*/
 					case 'ida':
 						if (count($args) == 1)
-							$msg = self::getList($IDA, $chat_id);
+							$msg = self::getList($IDA, $dao, $chat_id);
 						else 
-							$msg = self::addPool($IDA, $chat_id, $user_id, $username, $args);
+							$msg = self::addPool($IDA, $dao, $chat_id, $user_id, $username, $args);
 						break;
 
 					case 'volta':
 						if (count($args) == 1) 
-							$msg = self::getList($VOLTA, $chat_id);			
+							$msg = self::getList($VOLTA, $dao, $chat_id);			
 						else
-							$msg = self::addPool($VOLTA, $chat_id, $user_id, $username, $args);
+							$msg = self::addPool($VOLTA, $dao, $chat_id, $user_id, $username, $args);
 						break;
 
 					case 'vagas':
-						$msg = self::updatePool($chat_id, $user_id, $username, $args);
+						$msg = self::updatePool($dao, $chat_id, $user_id, $username, $args);
 						break;
 
 					case 'remover':
 						if (count($args) == 2)
-							$msg = self::deletePool($chat_id, $user_id, $username, $args);
+							$msg = self::deletePool($dao, $chat_id, $user_id, $username, $args);
 						break;
 				
 				}
