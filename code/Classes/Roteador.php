@@ -80,7 +80,7 @@ Ex: /vagas ida 2
 
 	private function getList($tipo){
 
-		if ( $tipo == $IDA ) {
+		if ( $tipo == $IDA )
 			$resultado = $dao->getListaIda($chat_id);
 		else
 			$resultado = $dao->getListaVolta($chat_id);
