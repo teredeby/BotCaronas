@@ -126,7 +126,7 @@
 			$msg  = "Erro de parametros:\n";
 			$msg .=  "Uso: /" . $m ." [horario] [vagas] [local] \nEx: /";
 			$msg .= $m . " as " . $h . " 2 bb";
-			if (count($args) == 2) {
+			if (count($args) == 1) {
 				$a = self::isValidTime($args[1]);
 				if ( $a[0] ){
 					$dao->createCarpool($chat_id, $user_id, $username, 
@@ -134,7 +134,7 @@
 					$msg = "@" . $username . " oferece carona de " . $m;
 					$msg .= " as " . $travel_hour;
 				}
-			}elseif (count($args) >= 4) {
+			}elseif (count($args) >= 3) {
 				$a = self::isValidTime($args[1]);
 				if ( $a[0] && (gettype($args[2]) == 'integer')){
 					$spots = $args[2];
@@ -164,7 +164,7 @@
 			$msg  = "Erro de parametros:\n";
 			$msg .=  "Uso: /vagas " . $m . " [ ida | volta]  vagas \nEx: ";
 			$msg .= "/vagas " . $m . " 2";
-			if (count($args) == 3) {
+			if (count($args) == 2) {
 				$spots = $args[2];
 				$dao->updateSpots($chat_id, $user_id, $spots, $flag);
 				$msg = "@".$username." atualizou o número de vagas de ";
@@ -184,7 +184,7 @@
 			}
 			$msg  = "Erro de parametros:\n";
 			$msg .=  "Uso: /remover [ida | volta] \nEx: /remover " . $m;
-			if (count($args) == 2) {
+			if (count($args) == 1) {
 				$dao->removeCarpool($chat_id, $user_id, $flag);
 				$msg = "@".$username." removeu sua ". $m;
 			} 
@@ -222,6 +222,7 @@
 			error_log( print_r( $command, true ) );
 			error_log( print_r( $args, true ) );
 			error_log( strlen($args[1]) );
+			error_log(count($args));
 			return $command;
 		}
 
