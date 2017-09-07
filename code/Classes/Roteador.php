@@ -8,7 +8,8 @@
 
 		private static $IDA	= "ida";
 		private static $VOLTA = "volta";
-		private static $msg   = "";
+		private $msg   = "";
+		
 		
 
 		private static function getRules() {
@@ -78,7 +79,7 @@
 			return $help;
 		}						
 
-		private static function getList($tipo){
+		private static function getList($tipo, $chat_id){
 
 			if ( $tipo == $IDA ) {
 				$resultado = $dao->getListaIda($chat_id);
@@ -112,7 +113,7 @@
 			return $a;
 		}
 
-		private static function addPool($tipo, ...$args){
+		private static function addPool($tipo, $chat_id, $user_id, $username, ...$args){
 			if ($tipo == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -150,7 +151,7 @@
 			return $msg;		
 		}
 
-		private static function updatePool( ...$args){
+		private static function updatePool($chat_id, $user_id, $username, ...$args){
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -171,7 +172,7 @@
 			} 
 		}
 
-		private static function deletePool( ...$args) {
+		private static function deletePool($chat_id, $user_id, $username, ...$args) {
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -272,25 +273,25 @@
 					/*Comandos de viagem*/
 					case 'ida':
 						if (count($args) == 1)
-							$msg = self::getList($IDA);
+							$msg = self::getList($IDA, $chat_id);
 						else 
-							$msg = self::addPool($IDA, $args);
+							$msg = self::addPool($IDA, $chat_id, $user_id, $username, $args);
 						break;
 
 					case 'volta':
 						if (count($args) == 1) 
-							$msg = self::getList($VOLTA);			
+							$msg = self::getList($VOLTA, $chat_id);			
 						else
-							$msg = self::addPool($VOLTA, $args);
+							$msg = self::addPool($VOLTA, $chat_id, $user_id, $username, $args);
 						break;
 
 					case 'vagas':
-						$msg = self::updatePool($args);
+						$msg = self::updatePool($chat_id, $user_id, $username, $args);
 						break;
 
 					case 'remover':
 						if (count($args) == 2)
-							$msg = self::deletePool($args);
+							$msg = self::deletePool($chat_id, $user_id, $username, $args);
 						break;
 				
 				}
