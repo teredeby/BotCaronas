@@ -126,11 +126,12 @@
 			$msg  = "Erro de parametros:\n";
 			$msg .=  "Uso: /" . $m ." [horario] [vagas] [local] \nEx: /";
 			$msg .= $m . " as " . $h . " 2 bb";
-			
+			error_log($args[0]);
+			error_log($args[1]);
+			error_log($args[2]);
+			error_log($args[3]);
+			error_log($args[4]);
 			if (count($args) == 2) {
-				error_log($args[0]);
-				error_log($args[1]);
-				error_log($args[2]);
 				$a = self::isValidTime($args[1]);
 				if ( $a[0] ){
 					$dao->createCarpool($chat_id, $user_id, $username, 
@@ -139,11 +140,6 @@
 					$msg .= " as " . $travel_hour;
 				}
 			}elseif (count($args) == 4) {
-				error_log($args[0]);
-				error_log($args[1]);
-				error_log($args[2]);
-				error_log($args[3]);
-				error_log($args[4]);
 				$a = self::isValidTime($args[1]);
 				if ( $a[0] && (gettype($args[2]) == 'integer')){
 					$spots = $args[2];
