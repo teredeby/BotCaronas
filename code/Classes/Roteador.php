@@ -126,7 +126,7 @@
 			$msg .=  "Uso: /" . $m ." [horario] [vagas] [local] \nEx: /";
 			$msg .= $m . " as " . $h . " 2 bb";
 			if (count($args) == 2) {
-				$a = $this->isValidTime($args[1]);
+				$a = self::isValidTime($args[1]);
 				if ( $a[0] ){
 					$dao->createCarpool($chat_id, $user_id, $username, 
 												$travel_hour, $flag);
@@ -134,7 +134,7 @@
 					$msg .= " as " . $travel_hour;
 				}
 			}elseif (count($args) >= 4) {
-				$a = $this->isValidTime($args[1]);
+				$a = self::isValidTime($args[1]);
 				if ( $a[0] && (gettype($args[2]) == 'integer')){
 					$spots = $args[2];
 					$location = "";
@@ -240,11 +240,11 @@
 				switch (strtolower($command)) {
 					/*comandos padrão*/
 					case 'regras':
-						$msg = $this->getRules();
+						$msg = self::getRules();
 						break;
 					
 					case 'help':
-						$msg = $this->getHelp();
+						$msg = self::getHelp();
 						break;
 						
 					case 'teste':
@@ -272,25 +272,25 @@
 					/*Comandos de viagem*/
 					case 'ida':
 						if (count($args) == 1)
-							$msg = $this->getList($IDA);
+							$msg = self::getList($IDA);
 						else 
-							$msg = $this->addPool($IDA, $args);
+							$msg = self::addPool($IDA, $args);
 						break;
 
 					case 'volta':
 						if (count($args) == 1) 
-							$msg = $this->getList($VOLTA);			
+							$msg = self::getList($VOLTA);			
 						else
-							$msg = $this->addPool($VOLTA, $args);
+							$msg = self::addPool($VOLTA, $args);
 						break;
 
 					case 'vagas':
-						$msg = $this->updatePool($args);
+						$msg = self::updatePool($args);
 						break;
 
 					case 'remover':
 						if (count($args) == 2)
-							$msg = $this->deletePool($args);
+							$msg = self::deletePool($args);
 						break;
 				
 				}
