@@ -11,7 +11,7 @@
 		private $msg   = "";
 		
 
-		private function getRules() {
+		private static function getRules() {
 			$regras = "Regras:
 			1. Novato? Cadastre sua foto e username nas configurações.
 
@@ -39,7 +39,7 @@
 		}
 
 
-		private function getHelp(){
+		private static function getHelp(){
 			$help = "Utilize este Bot para agendar as caronas. A utilização é super simples e através de comandos:
 
 			/ida [horario] [vagas] [local] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO.
@@ -78,116 +78,116 @@
 			return $help;
 		}						
 
-	private function getList($tipo){
+		private static function getList($tipo){
 
-		if ( $tipo == $IDA ) {
-			$resultado = $dao->getListaIda($chat_id);
-			$source = Config::getBotConfig("source");
-			$texto = "<b>Ida para " . $source . "</b>\n";
-		}
-		else {
-			$resultado = $dao->getListaVolta($chat_id);
-			$source = Config::getBotConfig("source");
-			$texto = "<b>Volta de " . $source . "</b>\n";
-		}
-		
-		foreach ($resultado as $carona){
-			$texto .= (string)$carona . "\n";
-		}
-		return $texto;
-	}
-
-	private function isValidTime($t){
-		$r = false;
-		$horarioRaw = $t;
-		$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
-		$horarioValido = preg_match($horarioRegex, $horarioRaw, $resultado);
-		if ($horarioValido){
-			$hora = $resultado['hora'];
-			$minuto = isset($resultado['minuto']) ? $resultado['minuto'] : "00";
-			$travel_hour = $hora . ":" . $minuto;
-			$r = true;
-		} 
-		$a = array($r , $travel_hour );
-		return $a;
-	}
-
-	private function addPool($tipo, ...$args){
-		if ($tipo == $IDA) {
-			$flag = '0';
-			$m    = "ida";
-			$h		= "10:00";
-		} else {
-			$flag = '1';
-			$m    = "volta";
-			$h		= "15:00";
-		}
-		$msg  = "Erro de parametros:\n";
-		$msg .=  "Uso: /" . $m ." [horario] [vagas] [local] \nEx: /";
-		$msg .= $m . " as " . $h . " 2 bb";
-		if (count($args) == 2) {
-			$a = isValidTime($args[1]);
-			if ( $a[0] ){
-				$dao->createCarpool($chat_id, $user_id, $username, 
-											$travel_hour, $flag);
-				$msg = "@" . $username . " oferece carona de " . $m;
-				$msg .= " as " . $travel_hour;
+			if ( $tipo == $IDA ) {
+				$resultado = $dao->getListaIda($chat_id);
+				$source = Config::getBotConfig("source");
+				$texto = "<b>Ida para " . $source . "</b>\n";
 			}
-		}elseif (count($args) >= 4) {
-			$a = isValidTime($args[1]);
-			if ( $a[0] && (gettype($args[2]) == 'integer')){
+			else {
+				$resultado = $dao->getListaVolta($chat_id);
+				$source = Config::getBotConfig("source");
+				$texto = "<b>Volta de " . $source . "</b>\n";
+			}
+			
+			foreach ($resultado as $carona){
+				$texto .= (string)$carona . "\n";
+			}
+			return $texto;
+		}
+
+		private static function isValidTime($t){
+			$r = false;
+			$horarioRaw = $t;
+			$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
+			$horarioValido = preg_match($horarioRegex, $horarioRaw, $resultado);
+			if ($horarioValido){
+				$hora = $resultado['hora'];
+				$minuto = isset($resultado['minuto']) ? $resultado['minuto'] : "00";
+				$travel_hour = $hora . ":" . $minuto;
+				$r = true;
+			} 
+			$a = array($r , $travel_hour );
+			return $a;
+		}
+
+		private static function addPool($tipo, ...$args){
+			if ($tipo == $IDA) {
+				$flag = '0';
+				$m    = "ida";
+				$h		= "10:00";
+			} else {
+				$flag = '1';
+				$m    = "volta";
+				$h		= "15:00";
+			}
+			$msg  = "Erro de parametros:\n";
+			$msg .=  "Uso: /" . $m ." [horario] [vagas] [local] \nEx: /";
+			$msg .= $m . " as " . $h . " 2 bb";
+			if (count($args) == 2) {
+				$a = isValidTime($args[1]);
+				if ( $a[0] ){
+					$dao->createCarpool($chat_id, $user_id, $username, 
+												$travel_hour, $flag);
+					$msg = "@" . $username . " oferece carona de " . $m;
+					$msg .= " as " . $travel_hour;
+				}
+			}elseif (count($args) >= 4) {
+				$a = isValidTime($args[1]);
+				if ( $a[0] && (gettype($args[2]) == 'integer')){
+					$spots = $args[2];
+					$location = "";
+					for($c=3; $c < count($args); $c++)
+						$location .= $args[$c] . " ";
+					$dao->createCarpoolWithDetails($chat_id, $user_id, $username, 
+														$travel_hour, $spots, $location, $flag);
+					$msg  = "@" . $username . " oferece carona de " . $m . " às ";
+					$msg .= $travel_hour . " com " . $spots . " vagas saindo de "; 
+					$msg .= $location;
+				} 
+			}
+			return $msg;		
+		}
+
+		private static function updatePool( ...$args){
+			if ($args[1] == $IDA) {
+				$flag = '0';
+				$m    = "ida";
+				$h		= "10:00";
+			} else {
+				$flag = '1';
+				$m    = "volta";
+				$h		= "15:00";
+			}
+			$msg  = "Erro de parametros:\n";
+			$msg .=  "Uso: /vagas " . $m . " [ ida | volta]  vagas \nEx: ";
+			$msg .= "/vagas " . $m . " 2";
+			if (count($args) == 3) {
 				$spots = $args[2];
-				$location = "";
-				for($c=3; $c < count($args); $c++)
-					$location .= $args[$c] . " ";
-				$dao->createCarpoolWithDetails($chat_id, $user_id, $username, 
-													$travel_hour, $spots, $location, $flag);
-				$msg  = "@" . $username . " oferece carona de " . $m . " às ";
-				$msg .= $travel_hour . " com " . $spots . " vagas saindo de "; 
-				$msg .= $location;
+				$dao->updateSpots($chat_id, $user_id, $spots, $flag);
+				$msg = "@".$username." atualizou o número de vagas de ";
+				$msg .= $m. "para " . $spots;
 			} 
 		}
-		return $msg;		
-	}
 
-	private function updatePool( ...$args){
-		if ($args[1] == $IDA) {
-			$flag = '0';
-			$m    = "ida";
-			$h		= "10:00";
-		} else {
-			$flag = '1';
-			$m    = "volta";
-			$h		= "15:00";
+		private static function deletePool( ...$args) {
+			if ($args[1] == $IDA) {
+				$flag = '0';
+				$m    = "ida";
+				$h		= "10:00";
+			} else {
+				$flag = '1';
+				$m    = "volta";
+				$h		= "15:00";
+			}
+			$msg  = "Erro de parametros:\n";
+			$msg .=  "Uso: /remover [ida | volta] \nEx: /remover " . $m;
+			if (count($args) == 2) {
+				$dao->removeCarpool($chat_id, $user_id, $flag);
+				$msg = "@".$username." removeu sua ". $m;
+			} 
 		}
-		$msg  = "Erro de parametros:\n";
-		$msg .=  "Uso: /vagas " . $m . " [ ida | volta]  vagas \nEx: ";
-		$msg .= "/vagas " . $m . " 2";
-		if (count($args) == 3) {
-			$spots = $args[2];
-			$dao->updateSpots($chat_id, $user_id, $spots, $flag);
-			$msg = "@".$username." atualizou o número de vagas de ";
-			$msg .= $m. "para " . $spots;
-		} 
-	}
-
-	private function deletePool( ...$args) {
-		if ($args[1] == $IDA) {
-			$flag = '0';
-			$m    = "ida";
-			$h		= "10:00";
-		} else {
-			$flag = '1';
-			$m    = "volta";
-			$h		= "15:00";
-		}
-		$msg  = "Erro de parametros:\n";
-		$msg .=  "Uso: /remover [ida | volta] \nEx: /remover " . $m;
-		if (count($args) == 2) {
-			$dao->removeCarpool($chat_id, $user_id, $flag);
-			$msg = "@".$username." removeu sua ". $m;
-		} 
-	}
 		/*Espera o objeto 'message' já como array*/
 		private static function processData($data){
 			$processedData = array();
@@ -272,7 +272,7 @@
 					/*Comandos de viagem*/
 					case 'ida':
 						if (count($args) == 1)
-							$msg = getlist($IDA);
+							$msg = getList($IDA);
 						else 
 							$msg = addPool($IDA, $args);
 						break;
