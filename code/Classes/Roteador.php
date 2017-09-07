@@ -12,7 +12,7 @@
 		
 		
 
-		private static function getRules() {
+		private function getRules() {
 			$regras = "Regras:
 			1. Novato? Cadastre sua foto e username nas configurações.
 
@@ -40,7 +40,7 @@
 		}
 
 
-		private static function getHelp(){
+		private function getHelp(){
 			$help = "Utilize este Bot para agendar as caronas. A utilização é super simples e através de comandos:
 
 			/ida [horario] [vagas] [local] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO.
@@ -79,7 +79,7 @@
 			return $help;
 		}						
 
-		private static function getList($tipo, $dao, $chat_id){
+		private function getList($tipo, $dao, $chat_id){
 
 			if ( $tipo == $IDA ) {
 				$resultado = $dao->getListaIda($chat_id);
@@ -98,7 +98,7 @@
 			return $texto;
 		}
 
-		private static function isValidTime($t){
+		private function isValidTime($t){
 			$r = false;
 			$horarioRaw = $t;
 			$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
@@ -113,7 +113,7 @@
 			return $a;
 		}
 
-		private static function addPool($tipo, $dao, $chat_id, $user_id, $username, ...$args){
+		private function addPool($tipo, $dao, $chat_id, $user_id, $username, $args){
 			if ($tipo == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -156,7 +156,7 @@
 			return $msg;		
 		}
 
-		private static function updatePool($dao, $chat_id, $user_id, $username, ...$args){
+		private function updatePool($dao, $chat_id, $user_id, $username, $args){
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -177,7 +177,7 @@
 			} 
 		}
 
-		private static function deletePool($dao, $chat_id, $user_id, $username, ...$args) {
+		private function deletePool($dao, $chat_id, $user_id, $username, $args) {
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
