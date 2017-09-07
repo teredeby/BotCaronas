@@ -245,7 +245,7 @@ Ex: /vagas ida 2
 						
 					case 'teste':
 						error_log("teste");
-						$msg = "Versão 1.5.1 - ChatId: $chat_id";
+						$msg = "Versão 07/09/2017 - ChatId: $chat_id";
 						break;
 
 					case 'stop':
