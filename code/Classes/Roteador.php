@@ -6,6 +6,184 @@
 
 	class Roteador{
 
+		private $IDA	= "ida";
+		private $VOLTA = "volta";
+		private $msg   = "";
+		
+
+		private function getRules() {
+			$regras = "Regras:
+1. Novato? Cadastre sua foto e username nas configurações.
+
+2. Existe um bot no grupo, digite / para que liste os comandos que ele aceita (/help por exemplo).
+
+3. Caronas de ida serão anunciadas depois das 19h do dia anterior.
+
+4. Caronas de volta (pra quem volta depois de 12h) serão anunciadas depois de 12h.
+
+5. Motoristas, anunciem com antecedência para as Caronas se programarem.
+
+6. Contribuição de R$5 pela carona é fortemente sugerida.
+
+7. Caronas serão preferencialmente anunciadas pelo bot de caronas.
+
+8. Manifeste interesse sempre que possível mencionando a @ do motorista e o chame IMEDIATAMENTE no privado para combinar rota e horário.
+
+9. Maneirar no flood nas horas críticas de anúncio de caronas. Os bots ajudam mas ainda não são perfeitos.
+
+10. Final de semana, assuntos livres!
+
+11. Duvidas ou sugestões para aprimorar o Bot fale com o @PeedroRod ou @Teredeby.";
+
+			return $regras;
+		}
+
+
+		private function getHelp(){
+			$help = "Utilize este Bot para agendar as caronas. A utilização é super simples e através de comandos:
+
+/ida [horario] [vagas] [local] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO.
+Ex: /ida 10:00 2 bb
+(Inclui uma carona de ida às 10:00 com 2 vagas saindo do bb)
+
+/ida [horario] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO. Nessa opção, não é necessário definir vagas e local.
+Ex: /ida 10:00
+(Inclui uma carona de ida às 10:00)
+
+Caso não seja colocado o parâmetro do horário (Ex: /ida) o bot irá apresentar a lista com as caronas registradas para o trajeto.
+
+/volta [horario] [vagas] [local] --> Este comando serve para definir um horário que você está VOLTANDO para CAMPO GRANDE. 
+Ex: /volta 15:00 3 bb 
+(Inclui uma carona de volta às 15:00 com 3 vagas para o bb)
+
+/volta [horario] --> Este comando serve para definir um horário que você está VOLTANDO para o CAMPO GRANDE. Nessa opção, não é necessário definir vagas e local.
+Ex: /volta 15:00
+(Inclui uma carona de volta às 15:00)
+								
+Caso não seja colocado o parâmetro do horário (Ex: /volta) o bot irá apresentar a lista com as caronas registradas para o trajeto.
+
+OBS --> O local agora pode conter espaços e sem limite de tamanho (atualizado)
+
+/remover [ida|volta] --> Comando utilizado para remover a carona da lista. SEMPRE REMOVA a carona depois dela ter sido realizada. O sistema não faz isso automaticamente. 
+Ex: /remover ida
+
+/vagas [ida|volta] [vagas] --> Este comando serve para atualizar o número de vagas de uma carona
+Ex: /vagas ida 2 
+(Altera o número de vagas da ida para 2)
+
+/fortune  [ on | off ] [ livro ] --> retorna uma frase famosa de um livro já cadastrado, implementado apenas o Murphy.  Se usado a opção on ou off liga ou desliga o modo ofensivo, padrão é desligado.
+
+";
+
+			return $help;
+		}						
+
+	private function getList($tipo){
+
+		if ( $tipo == $IDA ) {
+			$resultado = $dao->getListaIda($chat_id);
+		else
+			$resultado = $dao->getListaVolta($chat_id);
+		
+		$source = Config::getBotConfig("source");
+		$texto = "<b>Ida para " . $source . "</b>\n";
+		foreach ($resultado as $carona){
+			$texto .= (string)$carona . "\n";
+	
+		return $texto;
+	}
+
+	private function isValidTime($t){
+		$r = false;
+		$horarioRaw = $t;
+		$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
+		$horarioValido = preg_match($horarioRegex, $horarioRaw, $resultado);
+		if ($horarioValido){
+			$hora = $resultado['hora'];
+			$minuto = isset($resultado['minuto']) ? $resultado['minuto'] : "00";
+			$travel_hour = $hora . ":" . $minuto;
+			$r = true;
+		} 
+		$a = array($r , $travel_hour );
+		return $a;
+	}
+
+	private function addPool($tipo, ...$args){
+		if ($tipo == $IDA) {
+			$flag = '0';
+			$m    = "ida";
+			$h		= "10:00";
+		} else {
+			$flag = '1';
+			$m    = "volta";
+			$h		= "15:00";
+		}
+		$msg  = "Erro de parametros:\n";
+		$msg .=  "Uso: /" . $m ." [horario] [vagas] [local] \nEx: /";
+		$msg .= $m . " as " . $h . " 2 bb";
+		if (count($args) == 2) {
+			$a = isValidTime($args[1]);
+			if ( $a[0] ){
+				$dao->createCarpool($chat_id, $user_id, $username, 
+											$travel_hour, $flag);
+				$msg = "@" . $username . " oferece carona de " . $m;
+				$msg .= " as " . $travel_hour;
+			}
+		}elseif (count($args) >= 4) {
+			$a = isValidTime($args[1]);
+			if ( $a[0] && (gettype($args[2]) == 'integer')){
+				$spots = $args[2];
+				$location = "";
+				for($c=3; $c < count($args); $c++)
+					$location .= $args[$c] . " ";
+				$dao->createCarpoolWithDetails($chat_id, $user_id, $username, 
+													$travel_hour, $spots, $location, $flag);
+				$msg  = "@" . $username . " oferece carona de " . $m . " às ";
+				$msg .= $travel_hour . " com " . $spots . " vagas saindo de " 
+				$msg .= $location);
+			} 
+		}
+		return $msg;		
+	}
+
+	private function updatePool( ...$args){
+		if ($args[1] == $IDA) {
+			$flag = '0';
+			$m    = "ida";
+			$h		= "10:00";
+		} else {
+			$flag = '1';
+			$m    = "volta";
+			$h		= "15:00";
+		}
+		$msg  = "Erro de parametros:\n";
+		$msg .=  "Uso: /vagas " . $m . " [ ida | volta]  vagas \nEx: ";
+		$msg .= "/vagas " . $m . " 2";
+		if (count($args) == 3) {
+			$spots = $args[2];
+			$dao->updateSpots($chat_id, $user_id, $spots, $flag);
+			$msg = "@".$username." atualizou o número de vagas de ";
+			$msg .= $m. "para " . $spots;
+		} 
+	}
+
+	private function deletePool( ...$args) {
+		if ($args[1] == $IDA) {
+			$flag = '0';
+			$m    = "ida";
+			$h		= "10:00";
+		} else {
+			$flag = '1';
+			$m    = "volta";
+			$h		= "15:00";
+		}
+		$msg  = "Erro de parametros:\n";
+		$msg .=  "Uso: /remover [ida | volta] \nEx: /remover " . $m;
+		if (count($args) == 2) {
+			$dao->removeCarpool($chat_id, $user_id, $flag);
+			$msg = "@".$username." removeu sua ". $m;
+		} 
+	}
 		/*Espera o objeto 'message' já como array*/
 		private static function processData($data){
 			$processedData = array();
@@ -21,8 +199,12 @@
 		}
 
 		private static function processCommand($stringComando, &$args){
-			/* Trata uma string que começa com '/', seguido por no maximo 32 numeros, letras ou '_', seguido ou não de '@nomeDoBot */
+			/* Trata uma string que começa com '/', 
+				seguido por no maximo 32 numeros, 
+				letras ou '_', seguido ou não de '@nomeDoBot 
+			*/
 			$regexComando = '~^/(?P<comando>[\d\w_]{1,32})(?:@'. Config::getBotConfig('botName') .')?~';
+
 			$command = NULL;
 			$args = NULL;
 
@@ -54,261 +236,63 @@
 				switch (strtolower($command)) {
 					/*comandos padrão*/
 					case 'regras':
-						$regras = "Regras:
-									1. Novato? Cadastre sua foto e username nas configurações.
-
-									2. Existe um bot no grupo, digite / para que liste os comandos que ele aceita (/help por exemplo).
-
-									3. Caronas de ida serão anunciadas depois das 19h do dia anterior.
-
-									4. Caronas de volta (pra quem volta depois de 12h) serão anunciadas depois de 12h.
-
-									5. Motoristas, anunciem com antecedência para as Caronas se programarem.
-
-									6. Contribuição de R$5 pela carona é fortemente sugerida.
-
-									7. Caronas serão preferencialmente anunciadas pelo bot de caronas.
-
-									8. Manifeste interesse sempre que possível mencionando a @ do motorista e o chame IMEDIATAMENTE no privado para combinar rota e horário.
-
-									9. Maneirar no flood nas horas críticas de anúncio de caronas. Os bots ajudam mas ainda não são perfeitos.
-
-									10. Final de semana, assuntos livres!
-
-									11. Duvidas ou sugestões para aprimorar o Bot fale com o @PeedroRod ou @Teredeby.";
-
-						TelegramConnect::sendMessage($chat_id, $regras);
+						$msg = getRules();
 						break;
 					
 					case 'help':
-						$help = "Utilize este Bot para agendar as caronas. A utilização é super simples e através de comandos:
-
-								/ida [horario] [vagas] [local] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO.
-									Ex: /ida 10:00 2 bb
-									(Inclui uma carona de ida às 10:00 com 2 vagas saindo do bb)
-
-								/ida [horario] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO. Nessa opção, não é necessário definir vagas e local.
-									Ex: /ida 10:00
-									(Inclui uma carona de ida às 10:00)
-
-								Caso não seja colocado o parâmetro do horário (Ex: /ida) o bot irá apresentar a lista com as caronas registradas para o trajeto.
-
-								/volta [horario] [vagas] [local] --> Este comando serve para definir um horário que você está VOLTANDO para CAMPO GRANDE. 
-									Ex: /volta 15:00 3 bb 
-									(Inclui uma carona de volta às 15:00 com 3 vagas para o bb)
-
-								/volta [horario] --> Este comando serve para definir um horário que você está VOLTANDO para o CAMPO GRANDE. Nessa opção, não é necessário definir vagas e local.
-									Ex: /volta 15:00
-									(Inclui uma carona de volta às 15:00)
-								
-								Caso não seja colocado o parâmetro do horário (Ex: /volta) o bot irá apresentar a lista com as caronas registradas para o trajeto.
-
-								OBS --> Quando colocar o local, lembre de não utilizar espaço, pois o Bot não entende e dirá que vc escreveu errado.
-
-								Para o local utilize sempre letras minúsculas e para mais de um local siga o padrão : local01/local02/...
-									Ex: viaduto/riodoa/bb/mendanha
-
-								/remover [ida|volta] --> Comando utilizado para remover a carona da lista. SEMPRE REMOVA a carona depois dela ter sido realizada. O sistema não faz isso automaticamente. 
-									Ex: /remover ida
-
-								/vagas [ida|volta] [vagas] --> Este comando serve para atualizar o número de vagas de uma carona
-									Ex: /vagas ida 2 
-									(Altera o número de vagas da ida para 2)
-
-								/fortune  [ on | off ] [ livro ] --> retorna uma frase famosa de um livro já cadastrado, implementado apenas o Murphy.  Se usado a opção on ou off liga ou desliga o modo ofensivo, padrão é desligado.
-
-";
-						
-						TelegramConnect::sendMessage($chat_id, $help);
+						$msg = getHelp();
 						break;
 						
 					case 'teste':
 						error_log("teste");
-						$texto = "Versão 1.5 - ChatId: $chat_id";
-
-						TelegramConnect::sendMessage($chat_id, $texto);
+						$msg = "Versão 1.5.1 - ChatId: $chat_id";
 						break;
 
 					case 'stop':
-						$texto = "GALERA, OLHA A ZOEIRA...";
-
-						TelegramConnect::sendMessage($chat_id, $texto);
+						$msg = "GALERA, OLHA A ZOEIRA...";
 						break;
 						
-                    case 'romulomendonca':
-                        $texto = "GALERA ME DEIXEM EM PAZ...";
-                        TelegramConnect::sendMessage($chat_id, $texto);
-                        break;
+               case 'romulomendonca':
+                  $msg = "GALERA ME DEIXEM EM PAZ...";
+                  break;
                         
-                    case 'michaeldouglas':
-                        $texto = "NUNCA MAIS EU VOU DORMIR, NUNCA MAIS EU VOU DORMIR";
-                        TelegramConnect::sendMessage($chat_id, $texto);
-                        break;
+               case 'michaeldouglas':
+                  $msg = "NUNCA MAIS EU VOU DORMIR, NUNCA MAIS EU VOU DORMIR";
+                  break;
 						
 					case 'fortune':
-						$fortune = $dao->getFortune(false);
-						TelegramConnect::sendMessage($chat_id, $fortune);
+						$msg = $dao->getFortune(false);
 						break;
 
 
 					/*Comandos de viagem*/
 					case 'ida':
-						if (count($args) == 1) {
-
-							$resultado = $dao->getListaIda($chat_id);
-
-							$source = Config::getBotConfig("source");
-							$texto = "<b>Ida para " . $source . "</b>\n";
-							foreach ($resultado as $carona){
-								$texto .= (string)$carona . "\n";
-							}
-
-							TelegramConnect::sendMessage($chat_id, $texto);
-						} elseif (count($args) == 2) {
-
-							$horarioRaw = $args[1];
-							$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
-
-							$horarioValido = preg_match($horarioRegex, $horarioRaw, $resultado);
-
-							if ($horarioValido){
-								$hora = $resultado['hora'];
-								$minuto = isset($resultado['minuto']) ? $resultado['minuto'] : "00";
-
-								$travel_hour = $hora . ":" . $minuto;
-				
-								$dao->createCarpool($chat_id, $user_id, $username, $travel_hour, '0');
-
-								TelegramConnect::sendMessage($chat_id, "@" . $username . " oferece carona de ida às " . $travel_hour);
-							} else{
-								TelegramConnect::sendMessage($chat_id, "Horário inválido.");
-							}
-
-						} elseif (count($args) == 4) {
-
-							$horarioRaw = $args[1];
-							$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
-
-							$horarioValido = preg_match($horarioRegex, $horarioRaw, $resultado);
-
-							$spots = $args[2];
-							$location = $args[3];
-
-							if ($horarioValido){
-								$hora = $resultado['hora'];
-								$minuto = isset($resultado['minuto']) ? $resultado['minuto'] : "00";
-
-								$travel_hour = $hora . ":" . $minuto;
-				
-								$dao->createCarpoolWithDetails($chat_id, $user_id, $username, $travel_hour, $spots, $location, '0');
-
-								TelegramConnect::sendMessage($chat_id, "@" . $username . " oferece carona de ida às " . $travel_hour . " com " . $spots . " vagas saindo de " . $location);
-							} else{
-								TelegramConnect::sendMessage($chat_id, "Horário inválido.");
-							}
-						} else {
-							TelegramConnect::sendMessage($chat_id, "Uso: /ida [horario] [vagas] [local] \nEx: /ida 10:00 2 bb");
-						}
+						if (count($args) == 1)
+							$msg = getlist($IDA);
+						else 
+							$msg = addPool($IDA, $args);
 						break;
 
 					case 'volta':
-						if (count($args) == 1) {
-							$resultado = $dao->getListaVolta($chat_id);
-
-							$source = Config::getBotConfig("source");
-							$texto = "<b>Volta de " . $source . "</b>\n";
-							foreach ($resultado as $carona){
-								$texto .= (string)$carona . "\n";
-							}
-
-							TelegramConnect::sendMessage($chat_id, $texto);
-
-						} elseif (count($args) == 2) {
-
-							$horarioRaw = $args[1];
-							$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
-
-							$horarioValido = preg_match($horarioRegex, $horarioRaw, $resultado);
-
-							if ($horarioValido){
-								$hora = $resultado['hora'];
-								$minuto = isset($resultado['minuto']) ? $resultado['minuto'] : "00";
-
-								$travel_hour = $hora . ":" . $minuto;
-				
-								$dao->createCarpool($chat_id, $user_id, $username, $travel_hour, '1');
-
-								TelegramConnect::sendMessage($chat_id, "@" . $username . " oferece carona de volta às " . $travel_hour);
-							} else{
-								TelegramConnect::sendMessage($chat_id, "Horário inválido.");
-							}
-
-						} elseif (count($args) == 4) {
-
-							$horarioRaw = $args[1];
-
-							$horarioRegex = '/^(?P<hora>[0-2]?\d)(:(?P<minuto>[0-5]\d))?$/';
-
-							$horarioValido = preg_match($horarioRegex, $horarioRaw, $resultado);
-
-							$spots = $args[2];
-							$location = $args[3];
-
-							if ($horarioValido){
-								$hora = $resultado['hora'];
-								$minuto = isset($resultado['minuto']) ? $resultado['minuto'] : "00";
-
-								$travel_hour = $hora . ":" . $minuto;
-
-								$dao->createCarpoolWithDetails($chat_id, $user_id, $username, $travel_hour, $spots, $location, '1');
-
-								TelegramConnect::sendMessage($chat_id, "@" . $username . " oferece carona de volta às " . $travel_hour . " com " . $spots . " vagas indo até " . $location);
-
-							}else{
-								TelegramConnect::sendMessage($chat_id, "Horário inválido.");
-							}
-						} else {
-							TelegramConnect::sendMessage($chat_id, "Uso: /volta [horario] [vagas] [local] \nEx: /volta 15:00 2 bb");
-						}
+						if (count($args) == 1) 
+							$msg = getList($VOLTA);			
+						else
+							$msg = addPool($VOLTA, $args);
 						break;
 
 					case 'vagas':
-						if (count($args) == 3) {
-							$spots = $args[2];
-							if($args[1] == 'ida') {
-								$dao->updateSpots($chat_id, $user_id, $spots, '0');
-								TelegramConnect::sendMessage($chat_id, "@".$username." atualizou o número de vagas de ida para " . $spots);
-							} elseif ($args[1] == 'volta') {
-								$dao->updateSpots($chat_id, $user_id, $spots, '1');
-								TelegramConnect::sendMessage($chat_id, "@".$username." atualizou o número de vagas de volta para " . $spots);
-							} else {
-								TelegramConnect::sendMessage($chat_id, "Formato: /vagas [ida|volta] [vagas]\nEx: /volta ida 2");
-							}
-						} else {
-							TelegramConnect::sendMessage($chat_id, "Formato: /vagas [ida|volta] [vagas]\nEx: /volta ida 2");
-						}
+						$msg = updatePool($args);
 						break;
 
 					case 'remover':
-						if (count($args) == 2) {
-							if($args[1] == 'ida') {
-								$dao->removeCarpool($chat_id, $user_id, '0');
-								TelegramConnect::sendMessage($chat_id, "@".$username." removeu sua ida");
-							} elseif ($args[1] == 'volta') {
-								$dao->removeCarpool($chat_id, $user_id, '1');
-								TelegramConnect::sendMessage($chat_id, "@".$username." removeu sua volta");
-							} else {
-								TelegramConnect::sendMessage($chat_id, "Formato: /remover [ida|volta]");
-							}
-						} else {
-							TelegramConnect::sendMessage($chat_id, "Formato: /remover [ida|volta]");
-						}
-
+						if (count($args) == 2)
+							$msg = deletePool($args);
 						break;
 				
 				}
-			} else {
-				TelegramConnect::sendMessage($chat_id, "Registre seu username nas configurações do Telegram para utilizar o Bot.");
-			}
+			} else 
+				$msg = "Registre seu username nas configurações do Telegram para utilizar o Bot.";
+			TelegramConnect::sendMessage($chat_id, $msg);
 		}
-	}
+}
+
