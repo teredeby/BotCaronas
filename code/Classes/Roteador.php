@@ -13,27 +13,27 @@
 
 		private function getRules() {
 			$regras = "Regras:
-1. Novato? Cadastre sua foto e username nas configurações.
+			1. Novato? Cadastre sua foto e username nas configurações.
 
-2. Existe um bot no grupo, digite / para que liste os comandos que ele aceita (/help por exemplo).
+			2. Existe um bot no grupo, digite / para que liste os comandos que ele aceita (/help por exemplo).
 
-3. Caronas de ida serão anunciadas depois das 19h do dia anterior.
+			3. Caronas de ida serão anunciadas depois das 19h do dia anterior.
 
-4. Caronas de volta (pra quem volta depois de 12h) serão anunciadas depois de 12h.
+			4. Caronas de volta (pra quem volta depois de 12h) serão anunciadas depois de 12h.
 
-5. Motoristas, anunciem com antecedência para as Caronas se programarem.
+			5. Motoristas, anunciem com antecedência para as Caronas se programarem.
 
-6. Contribuição de R$5 pela carona é fortemente sugerida.
+			6. Contribuição de R$5 pela carona é fortemente sugerida.
 
-7. Caronas serão preferencialmente anunciadas pelo bot de caronas.
+			7. Caronas serão preferencialmente anunciadas pelo bot de caronas.
 
-8. Manifeste interesse sempre que possível mencionando a @ do motorista e o chame IMEDIATAMENTE no privado para combinar rota e horário.
+			8. Manifeste interesse sempre que possível mencionando a @ do motorista e o chame IMEDIATAMENTE no privado para combinar rota e horário.
 
-9. Maneirar no flood nas horas críticas de anúncio de caronas. Os bots ajudam mas ainda não são perfeitos.
+			9. Maneirar no flood nas horas críticas de anúncio de caronas. Os bots ajudam mas ainda não são perfeitos.
 
-10. Final de semana, assuntos livres!
+			10. Final de semana, assuntos livres!
 
-11. Duvidas ou sugestões para aprimorar o Bot fale com o @PeedroRod ou @Teredeby.";
+			11. Duvidas ou sugestões para aprimorar o Bot fale com o @PeedroRod ou @Teredeby.";
 
 			return $regras;
 		}
@@ -42,54 +42,58 @@
 		private function getHelp(){
 			$help = "Utilize este Bot para agendar as caronas. A utilização é super simples e através de comandos:
 
-/ida [horario] [vagas] [local] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO.
-Ex: /ida 10:00 2 bb
-(Inclui uma carona de ida às 10:00 com 2 vagas saindo do bb)
+			/ida [horario] [vagas] [local] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO.
+			Ex: /ida 10:00 2 bb
+			(Inclui uma carona de ida às 10:00 com 2 vagas saindo do bb)
 
-/ida [horario] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO. Nessa opção, não é necessário definir vagas e local.
-Ex: /ida 10:00
-(Inclui uma carona de ida às 10:00)
+			/ida [horario] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO. Nessa opção, não é necessário definir vagas e local.
+			Ex: /ida 10:00
+			(Inclui uma carona de ida às 10:00)
 
-Caso não seja colocado o parâmetro do horário (Ex: /ida) o bot irá apresentar a lista com as caronas registradas para o trajeto.
+			Caso não seja colocado o parâmetro do horário (Ex: /ida) o bot irá apresentar a lista com as caronas registradas para o trajeto.
 
-/volta [horario] [vagas] [local] --> Este comando serve para definir um horário que você está VOLTANDO para CAMPO GRANDE. 
-Ex: /volta 15:00 3 bb 
-(Inclui uma carona de volta às 15:00 com 3 vagas para o bb)
+			/volta [horario] [vagas] [local] --> Este comando serve para definir um horário que você está VOLTANDO para CAMPO GRANDE. 
+			Ex: /volta 15:00 3 bb 
+			(Inclui uma carona de volta às 15:00 com 3 vagas para o bb)
 
-/volta [horario] --> Este comando serve para definir um horário que você está VOLTANDO para o CAMPO GRANDE. Nessa opção, não é necessário definir vagas e local.
-Ex: /volta 15:00
-(Inclui uma carona de volta às 15:00)
-								
-Caso não seja colocado o parâmetro do horário (Ex: /volta) o bot irá apresentar a lista com as caronas registradas para o trajeto.
+			/volta [horario] --> Este comando serve para definir um horário que você está VOLTANDO para o CAMPO GRANDE. Nessa opção, não é necessário definir vagas e local.
+			Ex: /volta 15:00
+			(Inclui uma carona de volta às 15:00)
+											
+			Caso não seja colocado o parâmetro do horário (Ex: /volta) o bot irá apresentar a lista com as caronas registradas para o trajeto.
 
-OBS --> O local agora pode conter espaços e sem limite de tamanho (atualizado)
+			OBS --> O local agora pode conter espaços e sem limite de tamanho (atualizado)
 
-/remover [ida|volta] --> Comando utilizado para remover a carona da lista. SEMPRE REMOVA a carona depois dela ter sido realizada. O sistema não faz isso automaticamente. 
-Ex: /remover ida
+			/remover [ida|volta] --> Comando utilizado para remover a carona da lista. SEMPRE REMOVA a carona depois dela ter sido realizada. O sistema não faz isso automaticamente. 
+			Ex: /remover ida
 
-/vagas [ida|volta] [vagas] --> Este comando serve para atualizar o número de vagas de uma carona
-Ex: /vagas ida 2 
-(Altera o número de vagas da ida para 2)
+			/vagas [ida|volta] [vagas] --> Este comando serve para atualizar o número de vagas de uma carona
+			Ex: /vagas ida 2 
+			(Altera o número de vagas da ida para 2)
 
-/fortune  [ on | off ] [ livro ] --> retorna uma frase famosa de um livro já cadastrado, implementado apenas o Murphy.  Se usado a opção on ou off liga ou desliga o modo ofensivo, padrão é desligado.
+			/fortune  [ on | off ] [ livro ] --> retorna uma frase famosa de um livro já cadastrado, implementado apenas o Murphy.  Se usado a opção on ou off liga ou desliga o modo ofensivo, padrão é desligado.
 
-";
+			";
 
 			return $help;
 		}						
 
 	private function getList($tipo){
 
-		if ( $tipo == $IDA )
+		if ( $tipo == $IDA ) {
 			$resultado = $dao->getListaIda($chat_id);
-		else
+			$source = Config::getBotConfig("source");
+			$texto = "<b>Ida para " . $source . "</b>\n";
+		}
+		else {
 			$resultado = $dao->getListaVolta($chat_id);
+			$source = Config::getBotConfig("source");
+			$texto = "<b>Volta de " . $source . "</b>\n";
+		}
 		
-		$source = Config::getBotConfig("source");
-		$texto = "<b>Ida para " . $source . "</b>\n";
 		foreach ($resultado as $carona){
 			$texto .= (string)$carona . "\n";
-	
+		}
 		return $texto;
 	}
 
@@ -252,13 +256,13 @@ Ex: /vagas ida 2
 						$msg = "GALERA, OLHA A ZOEIRA...";
 						break;
 						
-               case 'romulomendonca':
-                  $msg = "GALERA ME DEIXEM EM PAZ...";
-                  break;
+					case 'romulomendonca':
+						$msg = "GALERA ME DEIXEM EM PAZ...";
+						break;
                         
-               case 'michaeldouglas':
-                  $msg = "NUNCA MAIS EU VOU DORMIR, NUNCA MAIS EU VOU DORMIR";
-                  break;
+					case 'michaeldouglas':
+						$msg = "NUNCA MAIS EU VOU DORMIR, NUNCA MAIS EU VOU DORMIR";
+						break;
 						
 					case 'fortune':
 						$msg = $dao->getFortune(false);
