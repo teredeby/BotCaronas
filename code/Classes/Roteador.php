@@ -144,7 +144,7 @@
 													$travel_hour, $spots, $location, $flag);
 				$msg  = "@" . $username . " oferece carona de " . $m . " às ";
 				$msg .= $travel_hour . " com " . $spots . " vagas saindo de "; 
-				$msg .= $location);
+				$msg .= $location;
 			} 
 		}
 		return $msg;		
