@@ -75,11 +75,11 @@
 
 		private static function getList($tipo, $dao, $chat_id){
 			error_log($tipo);
-			error_log($tipo == $IDA);
-			error_log($tipo != $IDA);
+			error_log($tipo == "ida");
+			error_log($tipo != "ida");
 			
 
-			if ( $tipo == $IDA ) {
+			if ( $tipo == "ida" ) {
 				$resultado = $dao->getListaIda($chat_id);
 				$source = Config::getBotConfig("source");
 				$texto = "<b>Ida para " . $source . "</b>\n";
@@ -112,7 +112,7 @@
 		}
 
 		private static function addPool($tipo, $dao, $chat_id, $user_id, $username, $args){
-			if ($tipo == $IDA) {
+			if ($tipo == "ida") {
 				$flag = '0';
 				$m    = "ida";
 				$h		= "10:00";
@@ -167,7 +167,7 @@
 			error_log($chat_id);
 			error_log($user_id);
 			error_log($username);
-			if ($args[1] == $IDA) {
+			if ($args[1] == "ida") {
 				$flag = '0';
 				$m    = "ida";
 				$h		= "10:00";
@@ -194,7 +194,7 @@
 			error_log($chat_id);
 			error_log($user_id);
 			error_log($username);
-			if ($args[1] == $IDA) {
+			if ($args[1] == "ida") {
 				$flag = '0';
 				$m    = "ida";
 				$h		= "10:00";
