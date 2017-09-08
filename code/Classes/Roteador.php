@@ -126,7 +126,12 @@
 			$msg  = "Erro de parametros:\n";
 			$msg .=  "Uso: /" . $m ." [horario] [vagas] [local] \nEx: /";
 			$msg .= $m . " as " . $h . " 2 bb";
-			error_log( print_r($args));
+			error_log("total");
+			error_log( print_r($args, true));
+			error_log("strlen");
+			error_log( strlen($args[1]) );
+			error_log("count");
+			error_log(count($args));
 			if (count($args) == 2) {
 				$a = self::isValidTime($args[1]);
 				if ( $a[0] ){
