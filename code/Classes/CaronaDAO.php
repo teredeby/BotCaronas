@@ -59,6 +59,10 @@
 
 		public function updateSpots($chat_id, $user_id, $spots, $route) {
 
+			error_log($chat_id);
+			error_log($user_id);
+			error_log($spots);
+			error_log($route);
 			$this->db->query(CaronaDAO::QUERY_UPDATE_SPOTS);
 			$this->db->bind(":chat_id", $chat_id);
 			$this->db->bind(":user_id", $user_id);
