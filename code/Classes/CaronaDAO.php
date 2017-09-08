@@ -174,7 +174,6 @@
 			$this->db->bind(":chat_id", $chat_id);
 			$this->db->bind(":user_id", $user_id);
 			$this->db->bind(":route", $route);
-			$this->db->debugDumbParams();
 			$this->db->execute();
 			error_log("Erro: " . $this->db->getError());
 		}

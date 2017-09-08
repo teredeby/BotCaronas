@@ -187,6 +187,7 @@
 				$msg = "@".$username." atualizou o número de vagas de ";
 				$msg .= $m. "para " . $spots;
 			} 
+			return $msg;
 		}
 
 		private static function deletePool($dao, $chat_id, $user_id, $username, $args) {
@@ -208,8 +209,9 @@
 			$msg .=  "Uso: /remover [ida | volta] \nEx: /remover " . $m;
 			if (count($args) == 2) {
 				$dao->removeCarpool($chat_id, $user_id, $flag);
-				$msg = "@".$username." removeu sua ". $m;
+				$msg = "@" . $username . " removeu sua " . $m;
 			} 
+			return $msg;
 		}
 		/*Espera o objeto 'message' já como array*/
 		private static function processData($data){
