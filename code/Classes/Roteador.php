@@ -113,7 +113,7 @@
 			return $a;
 		}
 
-		private static function addPool($tipo, $dao, $chat_id, $user_id, $username, ...$args){
+		private static function addPool($tipo, $dao, $chat_id, $user_id, $username, $args){
 			if ($tipo == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -157,7 +157,7 @@
 			return $msg;		
 		}
 
-		private static function updatePool($dao, $chat_id, $user_id, $username, ...$args){
+		private static function updatePool($dao, $chat_id, $user_id, $username, $args){
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -178,7 +178,7 @@
 			} 
 		}
 
-		private static function deletePool($dao, $chat_id, $user_id, $username, ...$args) {
+		private static function deletePool($dao, $chat_id, $user_id, $username, $args) {
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
