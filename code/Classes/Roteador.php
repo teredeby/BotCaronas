@@ -299,16 +299,16 @@
 					/*Comandos de viagem*/
 					case 'ida':
 						if (count($args) == 1)
-							$msg = self::getList($IDA, $dao, $chat_id);
+							$msg = self::getList("ida", $dao, $chat_id);
 						else 
-							$msg = self::addPool($IDA, $dao, $chat_id, $user_id, $username, $args);
+							$msg = self::addPool("ida", $dao, $chat_id, $user_id, $username, $args);
 						break;
 
 					case 'volta':
 						if (count($args) == 1) 
-							$msg = self::getList($VOLTA, $dao, $chat_id);			
+							$msg = self::getList("volta", $dao, $chat_id);			
 						else
-							$msg = self::addPool($VOLTA, $dao, $chat_id, $user_id, $username, $args);
+							$msg = self::addPool("volta", $dao, $chat_id, $user_id, $username, $args);
 						break;
 
 					case 'vagas':
