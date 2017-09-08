@@ -12,7 +12,7 @@
 		
 		
 
-		private function getRules() {
+		private static function getRules() {
 			$regras = "Regras:
 			1. Novato? Cadastre sua foto e username nas configurações.
 
@@ -40,7 +40,7 @@
 		}
 
 
-		private function getHelp(){
+		private static function getHelp(){
 			$help = "Utilize este Bot para agendar as caronas. A utilização é super simples e através de comandos:
 
 			/ida [horario] [vagas] [local] --> Este comando serve para definir um horário que você está INDO para o FUNDÃO.
@@ -79,7 +79,7 @@
 			return $help;
 		}						
 
-		private function getList($tipo, $dao, $chat_id){
+		private static function getList($tipo, $dao, $chat_id){
 
 			if ( $tipo == $IDA ) {
 				$resultado = $dao->getListaIda($chat_id);
@@ -98,7 +98,7 @@
 			return $texto;
 		}
 
-		private function isValidTime($t){
+		private static function isValidTime($t){
 			$r = false;
 			$horarioRaw = $t;
 			$horarioRegex = '/^(?P<hora>[01]?\d|2[0-3])(?::(?P<minuto>[0-5]\d))?$/';
@@ -113,7 +113,7 @@
 			return $a;
 		}
 
-		private function addPool($tipo, $dao, $chat_id, $user_id, $username, $args){
+		private static function addPool($tipo, $dao, $chat_id, $user_id, $username, ...$args){
 			if ($tipo == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -131,6 +131,11 @@
 			error_log($args[2]);
 			error_log($args[3]);
 			error_log($args[4]);
+			error_log($args[5]);
+			error_log($args[6]);
+			error_log($args[7]);
+			error_log($args[8]);
+			error_log($args[9]);
 			if (count($args) == 2) {
 				$a = self::isValidTime($args[1]);
 				if ( $a[0] ){
@@ -156,7 +161,7 @@
 			return $msg;		
 		}
 
-		private function updatePool($dao, $chat_id, $user_id, $username, $args){
+		private static function updatePool($dao, $chat_id, $user_id, $username, ...$args){
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -177,7 +182,7 @@
 			} 
 		}
 
-		private function deletePool($dao, $chat_id, $user_id, $username, $args) {
+		private static function deletePool($dao, $chat_id, $user_id, $username, ...$args) {
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
