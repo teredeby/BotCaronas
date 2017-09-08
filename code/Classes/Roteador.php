@@ -141,13 +141,18 @@
 					$msg = "@" . $username . " oferece carona de " . $m;
 					$msg .= " as " . $a[1];
 				}
-			}elseif (count($args) == 4) {
+			}elseif (count($args) >= 4) {
 				$a = self::isValidTime($args[1]);
+				error_log(print_r($a, true));
+				error_log(gettype($args[2]));
 				if ( $a[0] && (gettype($args[2]) == 'integer')){
 					$spots = $args[2];
 					$location = "";
 					for($c=3; $c < count($args); $c++)
+					{
 						$location .= $args[$c] . " ";
+						error_log($location);
+					}
 					$dao->createCarpoolWithDetails($chat_id, $user_id, $username, 
 														$a[1], $spots, $location, $flag);
 					$msg  = "@" . $username . " oferece carona de " . $m . " às ";
