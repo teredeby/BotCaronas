@@ -134,11 +134,12 @@
 			error_log(count($args));
 			if (count($args) == 2) {
 				$a = self::isValidTime($args[1]);
+				error_log(print_r($a, true));
 				if ( $a[0] ){
 					$dao->createCarpool($chat_id, $user_id, $username, 
-												$travel_hour, $flag);
+												$a[1], $flag);
 					$msg = "@" . $username . " oferece carona de " . $m;
-					$msg .= " as " . $travel_hour;
+					$msg .= " as " . $a[1];
 				}
 			}elseif (count($args) == 4) {
 				$a = self::isValidTime($args[1]);
@@ -148,9 +149,9 @@
 					for($c=3; $c < count($args); $c++)
 						$location .= $args[$c] . " ";
 					$dao->createCarpoolWithDetails($chat_id, $user_id, $username, 
-														$travel_hour, $spots, $location, $flag);
+														$a[1], $spots, $location, $flag);
 					$msg  = "@" . $username . " oferece carona de " . $m . " às ";
-					$msg .= $travel_hour . " com " . $spots . " vagas saindo de "; 
+					$msg .= $a[1] . " com " . $spots . " vagas saindo de "; 
 					$msg .= $location;
 				} 
 			}
