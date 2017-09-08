@@ -12,7 +12,7 @@
 		const QUERY_UPDATE_CARPOOL = "update public.caroneiros set travel_hour = :travel_hour, spots = '', location = '', expiration = :expiration where chat_id = :chat_id and user_id = :user_id and route = :route::bit(1)";
 		const QUERY_UPDATE_CARPOOL_WITH_DETAILS = "update public.caroneiros set travel_hour = :travel_hour, spots = :spots, location = :location, expiration = :expiration where chat_id = :chat_id and user_id = :user_id and route = :route::bit(1)";
         
-		const QUERY_UPDATE_SPOTS = "update public.caroneiros set spots = :spots where chat_id = ':chat_id' and user_id = ':user_id' and route = :route::bit(1)";
+		const QUERY_UPDATE_SPOTS = "update public.caroneiros set spots = :spots where chat_id = :chat_id and user_id = :user_id and route = :route::bit(1)";
 
 		const QUERY_SEARCH = "select * from public.caroneiros where chat_id = :chat_id and user_id = :user_id and route = :route::bit(1) ORDER BY travel_hour ASC;";
 
@@ -174,6 +174,7 @@
 			$this->db->bind(":chat_id", $chat_id);
 			$this->db->bind(":user_id", $user_id);
 			$this->db->bind(":route", $route);
+			$this->db->debugDumbParams();
 			$this->db->execute();
 			error_log("Erro: " . $this->db->getError());
 		}
@@ -261,7 +262,7 @@
 			$this->db->bind(":offset", $r);
 			$result = $this->db->single();
 			
-			return ( nl2br($result['frase']) );
+			return ( $result['frase'] );
 		}
     }
 
