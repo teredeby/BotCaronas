@@ -144,8 +144,8 @@
 			}elseif (count($args) >= 4) {
 				$a = self::isValidTime($args[1]);
 				error_log(print_r($a, true));
-				error_log(gettype($args[2]));
-				if ( $a[0] && (gettype($args[2]) == 'integer')){
+				error_log(settype($args[2]));
+				if ( $a[0] && (settype($args[2], "integer")){
 					$spots = $args[2];
 					$location = "";
 					for($c=3; $c < count($args); $c++)
