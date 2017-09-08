@@ -249,9 +249,9 @@
 		}
 
 		public static function direcionar($request){
-			private static $IDA	= "ida";
-			private static $VOLTA = "volta";
-			private $msg   = "";
+			$IDA	= "ida";
+			$VOLTA = "volta";
+			$msg   = "";
 			$args = array();
 			$command = self::processCommand($request['message']['text'], $args);
 			$dados = self::processData($request);
