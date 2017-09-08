@@ -6,12 +6,6 @@
 
 	class Roteador{
 
-		private static $IDA	= "ida";
-		private static $VOLTA = "volta";
-		private $msg   = "";
-		
-		
-
 		private static function getRules() {
 			$regras = "Regras:
 			1. Novato? Cadastre sua foto e username nas configurações.
@@ -255,6 +249,9 @@
 		}
 
 		public static function direcionar($request){
+			private static $IDA	= "ida";
+			private static $VOLTA = "volta";
+			private $msg   = "";
 			$args = array();
 			$command = self::processCommand($request['message']['text'], $args);
 			$dados = self::processData($request);
