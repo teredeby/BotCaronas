@@ -164,6 +164,8 @@
 		}
 
 		private static function updatePool($dao, $chat_id, $user_id, $username, $args){
+			error_log("total");
+			error_log( print_r($args, true));
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
@@ -185,6 +187,8 @@
 		}
 
 		private static function deletePool($dao, $chat_id, $user_id, $username, $args) {
+			error_log("total");
+			error_log( print_r($args, true));
 			if ($args[1] == $IDA) {
 				$flag = '0';
 				$m    = "ida";
