@@ -261,10 +261,8 @@
 			$this->db->bind(":offset", $r);
 			$result = $this->db->single();
 			
-			$str = str_replace(array("\r\n", "\r", "\n"), "<br />", $result['frase']); 
-			
-			return ($str);
-			
+			return ( $result['frase'] );
+
 		}
     }
 
