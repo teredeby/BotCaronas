@@ -81,6 +81,9 @@
 
 		private static function getList($tipo, $dao, $chat_id){
 			error_log($tipo);
+			error_log($tipo == $IDA);
+			error_log($tipo != $IDA);
+			
 
 			if ( $tipo == $IDA ) {
 				$resultado = $dao->getListaIda($chat_id);
