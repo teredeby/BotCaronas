@@ -183,7 +183,7 @@
 				$spots = $args[2];
 				$dao->updateSpots($chat_id, $user_id, $spots, $flag);
 				$msg = "@".$username." atualizou o número de vagas de ";
-				$msg .= $m. "para " . $spots;
+				$msg .= $m. " para " . $spots;
 			} 
 			return $msg;
 		}
