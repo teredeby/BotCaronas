@@ -154,7 +154,7 @@
 					$dao->createCarpoolWithDetails($chat_id, $user_id, $username, 
 														$a[1], $spots, $location, $flag);
 					$msg  = "@" . $username . " oferece carona de " . $m . " às ";
-					$msg .= $a[1] . " com " . $spots . " vagas saindo de "; 
+					$msg .= $a[1] . " com " . $spots . " vagas saindo de/indo até "; 
 					$msg .= $location;
 				} 
 			}
