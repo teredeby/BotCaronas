@@ -33,6 +33,7 @@ class Carona{
 	public function ehIda(){
 		return $this->route == 0;
 	}
+	
 }
 
     
