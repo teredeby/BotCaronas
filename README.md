@@ -33,7 +33,7 @@ Bot para gerenciar caronas usado no [Telegram].
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ### Funcionalidades:
-  - Adicionar/Remover caronas com horário, número de vagas e origm/destino
+  - Adicionar/Remover caronas com horário, número de vagas e origem/destino
   - Exibir lista com as caronas de ida e volta
 
 ### Version
