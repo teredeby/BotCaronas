@@ -1,12 +1,14 @@
 create table caroneiros(
 	id bigserial UNIQUE PRIMARY KEY,
-	chat_id int NOT NULL,
-	user_id int NOT NULL,
-	username varchar(128),
-	spots varchar(128),
-	location varchar(128),
+	chat_id int8 NOT NULL,
+	user_id int8 NOT NULL,
+	username varchar(256),
+	spots varchar(256),
+	location varchar(256),
 	travel_hour time,
-	route bit not null
+	route bit not null,
+	expiration int8 NULL,
+	CONSTRAINT caroneiros_pkey PRIMARY KEY (id)
 );
 
 create table livro (
